@@ -8,8 +8,13 @@ module.exports = {
 	parserOptions: {
 		project: 'tsconfig.lint.json',
 		extraFileExtensions: ['.json'],
+		ecmaFeatures: {
+			jsx: true,
+			modules: true,
+		},
+		sourceType: 'module',
 	},
-	plugins: ['@typescript-eslint', 'prettier'],
+	plugins: ['@typescript-eslint', 'prettier', 'react'],
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/eslint-recommended',
@@ -39,8 +44,26 @@ module.exports = {
 		'@typescript-eslint/ban-types': 2,
 		'@typescript-eslint/class-literal-property-style': 2,
 		'@typescript-eslint/naming-convention': 2,
-		'@typescript-eslint/no-unused-vars': 2,
+		'@typescript-eslint/no-unused-vars': [
+			2,
+			{
+				varsIgnorePattern: 'h',
+			},
+		],
 		'@typescript-eslint/no-empty-interface': 0,
 		'no-mixed-spaces-and-tabs': 0,
+		'@typescript-eslint/no-explicit-any': 2,
+		'react/jsx-uses-vars': 2,
+		'react/jsx-uses-react': 2,
+		'no-restricted-syntax': [
+			// casts are NOT ALLOWED!
+			'error',
+			"TSAsExpression[typeAnnotation.typeName.name!='const']",
+		],
+	},
+	settings: {
+		react: {
+			pragma: 'h',
+		},
 	},
 }

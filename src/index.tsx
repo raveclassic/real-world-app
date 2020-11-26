@@ -1,4 +1,12 @@
-console.log('foo22')
+import { TideGauge } from './presentation/view/tide-gauge/tide-gauge.component'
+
+const root = document.getElementById('root')
+const render = async () => {
+	if (root) {
+		root.appendChild(await TideGauge())
+	}
+}
+void render()
 
 if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
 	window.addEventListener('load', () => {

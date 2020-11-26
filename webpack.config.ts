@@ -11,7 +11,7 @@ const isProduction = process.env.NODE_ENV === 'production'
 
 const options = {
 	async: false,
-	useTypescriptIncrementalApi: true,
+	// useTypescriptIncrementalApi: true,
 	memoryLimit: 4096,
 }
 
@@ -27,8 +27,14 @@ const config: Configuration = {
 	mode: isProduction ? 'production' : 'development',
 	plugins: [
 		isProduction ? new CleanWebpackPlugin() : noop,
-		new HtmlWebpackPlugin(),
-		isProduction ? noop : new ForkTsCheckerWebpackPlugin(options),
+		new HtmlWebpackPlugin({
+			template: './src/index.html',
+		}),
+		isProduction
+			? noop
+			: new ForkTsCheckerWebpackPlugin({
+					async: true,
+			  }),
 		isProduction
 			? new WorkboxPlugin.GenerateSW({
 					clientsClaim: true,
@@ -38,6 +44,11 @@ const config: Configuration = {
 	],
 	devServer: {
 		contentBase: './build',
+		proxy: {
+			['/page']: {
+
+			}
+		}
 	},
 	optimization: {
 		runtimeChunk: 'single',
@@ -67,9 +78,16 @@ const config: Configuration = {
 				],
 				exclude: /node_modules/,
 			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
 		],
 	},
 	devtool: false,
+	resolve: {
+		extensions: ['.tsx', '.ts', '.js'],
+	},
 }
 
 export default config
