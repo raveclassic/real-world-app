@@ -44,12 +44,7 @@ module.exports = {
 		'@typescript-eslint/ban-types': 2,
 		'@typescript-eslint/class-literal-property-style': 2,
 		'@typescript-eslint/naming-convention': 2,
-		'@typescript-eslint/no-unused-vars': [
-			2,
-			{
-				varsIgnorePattern: 'h',
-			},
-		],
+		'@typescript-eslint/no-unused-vars': 2,
 		'@typescript-eslint/no-empty-interface': 0,
 		'no-mixed-spaces-and-tabs': 0,
 		'@typescript-eslint/no-explicit-any': 2,
@@ -63,7 +58,7 @@ module.exports = {
 	},
 	settings: {
 		react: {
-			pragma: 'h',
+			pragma: 'H',
 		},
 	},
 }

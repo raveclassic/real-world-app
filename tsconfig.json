@@ -16,10 +16,12 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "H.createElement",
+    "jsxFragmentFactory": "H.Fragment"
   },
   "include": [
-    "."
+    ".",
+    "./node_modules/sinuous/jsx.d.ts"
   ],
   "exclude": [
     "build",

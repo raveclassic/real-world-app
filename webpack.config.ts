@@ -9,12 +9,6 @@ const ROOT = path.resolve(__dirname)
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-const options = {
-	async: false,
-	// useTypescriptIncrementalApi: true,
-	memoryLimit: 4096,
-}
-
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
 
@@ -45,10 +39,8 @@ const config: Configuration = {
 	devServer: {
 		contentBase: './build',
 		proxy: {
-			['/page']: {
-
-			}
-		}
+			['/page']: {},
+		},
 	},
 	optimization: {
 		runtimeChunk: 'single',

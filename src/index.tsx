@@ -1,18 +1,16 @@
-import { TideGauge } from './presentation/view/tide-gauge/tide-gauge.component'
+import { render } from 'sinuous/render'
+import { H } from './util/h'
+import { AppContainer } from './presentation/view/app/app/app.container'
+import { navigationRepositoryImpl } from './data/repository/navigation/navigation.repository'
+import { navigationServiceImpl } from './data/service/navigation/navigation.service'
+import { createHashHistory } from 'history'
 
 const root = document.getElementById('root')
-const render = async () => {
-	if (root) {
-		root.appendChild(await TideGauge())
-	}
+const DIContainer = () => {
+	const history = createHashHistory()
+	const navigationService = navigationServiceImpl({ history })
+	const navigationRepository = navigationRepositoryImpl({ navigationService })
+	const Resolved = AppContainer({ navigationRepository })
+	return <Resolved />
 }
-void render()
-
-if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker
-			.register('./service-worker.js')
-			.then(() => console.log('[SW] Registered'))
-			.catch((e) => console.error('[SW] Registration error', e))
-	})
-}
+render(DIContainer, root ?? undefined)

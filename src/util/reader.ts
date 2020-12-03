@@ -163,8 +163,9 @@ const defer = <E extends object, A, K extends keyof E>(
 	fa: Reader<E, A>,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	...keys: K[]
-): // eslint-disable-next-line no-restricted-syntax
-Reader<Omit<E, K>, Reader<Pick<E, K>, A>> => (outerE) => (innerE) => fa(Object.assign({}, outerE, innerE) as E)
+): Reader<{ [P in Exclude<keyof E, K>]: E[P] }, Reader<{ [P in K]: E[P] }, A>> => (outerE) => (innerE) =>
+	// eslint-disable-next-line no-restricted-syntax
+	fa(Object.assign({}, outerE, innerE) as E)
 
 export const reader = {
 	combine,
