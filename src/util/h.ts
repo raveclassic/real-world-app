@@ -15,5 +15,6 @@ export namespace H {
 		return sinuousH(type, p, ...children)
 	}
 
-	export const Fragment = sinuousH
+	export const Fragment = (props: ElementChildren[], ...children: ElementChildren[]) =>
+		sinuousH(children, ...children)
 }

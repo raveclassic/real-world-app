@@ -13,66 +13,63 @@ export const Header = reader.combine(
 			<nav className="navbar navbar-light">
 				<div className="container">
 					<LinkContainer page={() => ({ kind: 'home' })} className={() => 'navbar-brand'}>
-						span
+						conduit
 					</LinkContainer>
 				</div>
 
-				{() =>
-					auth().kind === 'unauthorized' && (
-						<ul className="nav navbar-nav pull-xs-right">
-							<li className="nav-item">
-								<NavLinkContainer page={() => ({ kind: 'home' })}>Home</NavLinkContainer>
-							</li>
+				<ul className="nav navbar-nav pull-xs-right">
+					<li className="nav-item">
+						<NavLinkContainer page={() => ({ kind: 'home' })}>Home</NavLinkContainer>
+					</li>
 
-							<li className="nav-item">
-								<NavLinkContainer page={() => ({ kind: 'login' })}>
-									<i class="ion-compose" />
-									Sign in
-								</NavLinkContainer>
-							</li>
+					{() => {
+						const value = auth()
+						switch (value.kind) {
+							case 'unauthorized': {
+								return (
+									<>
+										<li className="nav-item">
+											<NavLinkContainer page={() => ({ kind: 'login' })}>
+												Sign in
+											</NavLinkContainer>
+										</li>
 
-							<li className="nav-item">
-								<NavLinkContainer page={() => ({ kind: 'register' })}>
-									<i className="ion-compose" />
-									Sign up
-								</NavLinkContainer>
-							</li>
-						</ul>
-					)
-				}
+										<li className="nav-item">
+											<NavLinkContainer page={() => ({ kind: 'register' })}>
+												Sign up
+											</NavLinkContainer>
+										</li>
+									</>
+								)
+							}
+							case 'authorized': {
+								return (
+									<>
+										<li className="nav-item">
+											<NavLinkContainer page={() => ({ kind: 'editor' })}>
+												<i className="ion-compose" /> New Article
+											</NavLinkContainer>
+										</li>
 
-				{() => {
-					const value = auth()
-					return (
-						value.kind === 'authorized' && (
-							<ul className="nav navbar-nav pull-xs-right">
-								<li className="nav-item">
-									<NavLinkContainer page={() => ({ kind: 'home' })}>Home</NavLinkContainer>
-								</li>
+										<li className="nav-item">
+											<NavLinkContainer page={() => ({ kind: 'settings' })}>
+												<i className="ion-gear-a" /> Settings
+											</NavLinkContainer>
+										</li>
 
-								<li className="nav-item">
-									<NavLinkContainer page={() => ({ kind: 'editor' })}>
-										<i className="ion-compose" />
-										New Article
-									</NavLinkContainer>
-								</li>
-
-								<li className="nav-item">
-									<NavLinkContainer page={() => ({ kind: 'settings' })}>
-										<i className="ion-compose" />
-									</NavLinkContainer>
-								</li>
-
-								<li className="nav-item">
-									<NavLinkContainer page={() => ({ kind: 'profile', username: value.user.name })}>
-										<img src={value.user.image} alt="" className="src" />
-										<i className="ion-compose" />
-									</NavLinkContainer>
-								</li>
-							</ul>
-						)
-					)
-				}}
+										<li className="nav-item">
+											<NavLinkContainer
+												page={() => ({ kind: 'profile', username: value.user.name })}>
+												<img src={value.user.image} alt="avatar" className="user-pic" />
+												{value.user.name}
+											</NavLinkContainer>
+										</li>
+									</>
+								)
+							}
+						}
+					}}
+				</ul>
 			</nav>
 		)
 	},
