@@ -44,6 +44,7 @@
     "csstype": "^2.6.11",
     "goober": "^1.8.0",
     "history": "^5.0.0",
+    "io-ts": "^2.2.13",
     "normalize.css": "^8.0.1",
     "sinuous": "^0.27.11",
     "todomvc-app-css": "^2.3.0",

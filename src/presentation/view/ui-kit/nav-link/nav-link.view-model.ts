@@ -1,7 +1,7 @@
 import { Getter } from '../../../../util/observable'
 import { reader } from '../../../../util/reader'
-import { appModel } from '../../../../domain/model/app/app.model'
 import { Page } from '../../../../domain/entity/page/page.entity'
+import { navigationService } from '../../../service/navigation/navigation.service'
 
 export interface NavLinkViewModel {
 	readonly page: Getter<Page>
@@ -13,11 +13,11 @@ export interface NewLinkViewModelArgs {
 }
 
 export const newLinkVieModel = reader.combine(
-	appModel,
-	(appStore) => (args: NewLinkViewModelArgs): NavLinkViewModel => {
-		const isActive = () => {
-			return appStore.convertPageToUrl(appStore.page()) === appStore.convertPageToUrl(args.page())
-		}
+	navigationService,
+	(navigationService) => (args: NewLinkViewModelArgs): NavLinkViewModel => {
+		const isActive = () =>
+			navigationService.convertPageToUrl(navigationService.page()) ===
+			navigationService.convertPageToUrl(args.page())
 		return {
 			...args,
 			isActive,

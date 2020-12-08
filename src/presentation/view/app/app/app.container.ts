@@ -1,9 +1,13 @@
 import { App } from './app'
 import { reader } from '../../../../util/reader'
-import { newAppModel } from '../../../../domain/model/app/app.model'
+import { newAuthModel } from '../../../../domain/model/auth/auth.model'
 
-export const AppContainer = reader.combine(reader.defer(App, 'appModel'), newAppModel, (getApp, newAppModel) => () => {
-	const appModel = newAppModel()
-	const App = getApp({ appModel })
-	return App()
-})
+export const AppContainer = reader.combine(
+	reader.defer(App, 'authModel'),
+	newAuthModel,
+	(getApp, newAuthModel) => () => {
+		const authModel = newAuthModel()
+		const App = getApp({ authModel })
+		return App()
+	},
+)

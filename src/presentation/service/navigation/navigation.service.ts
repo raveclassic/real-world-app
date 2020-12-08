@@ -1,22 +1,49 @@
 import { reader } from '../../../util/reader'
-import { NavigationRepository } from '../../../domain/repository/navigation/navigation.repository'
-import { Page } from '../../../domain/entity/page/page.entity'
-import { navigationService } from '../../service/navigation/navigation.service'
+import { cleanup, S } from 'sinuous/observable'
+import { data } from '../../../util/observable'
+import { History } from 'history'
+import { homePage, Page } from '../../../domain/entity/page/page.entity'
 
-export const navigationRepositoryImpl = reader.combine(
-	navigationService,
-	(navigationService): NavigationRepository => {
-		const navigate = navigationService.push
-		const page = () => {
-			return parseUrl(navigationService.url())
-		}
+export interface NavigationService {
+	readonly page: () => Page
+	readonly navigateToUrl: (url: string) => void
+	readonly navigateToPage: (page: Page) => void
+	readonly convertPageToUrl: (page: Page) => string
+}
+
+export const navigationServiceImpl = reader.combine(
+	reader.key<History>()('history'),
+	(history): NavigationService => {
+		const url = data(history.location.pathname)
+		const listener = history.listen((update) => url(update.location.pathname))
+		const navigateToUrl = (value: string) => history.push(value)
+		const navigateToPage = (page: Page) => navigateToUrl(convertPageToUrl(page))
+		const page = S(
+			(): Page => {
+				const currentPage = parseUrl(url())
+				if (currentPage === undefined) {
+					navigateToPage(homePage)
+					return homePage
+				}
+				return currentPage
+			},
+		)
+
+		cleanup(listener)
+
 		return {
-			navigate,
+			navigateToUrl,
+			navigateToPage,
 			page,
 			convertPageToUrl,
 		}
 	},
 )
+/**
+ * NavigationService dependency
+ * @singleton
+ */
+export const navigationService = reader.key<NavigationService>()('navigationService')
 
 const parseUrl = (url: string): Page | undefined => {
 	if (url === '/login') {

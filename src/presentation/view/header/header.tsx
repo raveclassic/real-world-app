@@ -1,8 +1,8 @@
-import { reader } from '../../../../util/reader'
-import { NavLinkContainer } from '../../ui-kit/nav-link/nav-link.container'
-import { LinkContainer } from '../../ui-kit/link/link.container'
+import { reader } from '../../../util/reader'
+import { NavLinkContainer } from '../ui-kit/nav-link/nav-link.container'
+import { LinkContainer } from '../ui-kit/link/link.container'
 import { HeaderViewModel } from './header.view-model'
-import { H } from '../../../../util/h'
+import { H } from '../../../util/h'
 
 export const Header = reader.combine(
 	LinkContainer,
