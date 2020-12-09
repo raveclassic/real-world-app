@@ -1,10 +1,11 @@
 import { reader } from '../../../util/reader'
-import { Type, voidType } from 'io-ts'
+import { strict, Type, voidType } from 'io-ts'
 import Bluebird from 'bluebird'
 import { either } from 'fp-ts'
 import { Articles, articlesCodec } from '../../../domain/entity/article/article.entity'
 import { User, userCodec } from '../../../domain/entity/user/user.entity'
 import { HTTPDataSource } from './http.data-source'
+import { Tags, tagsCodec } from '../../../domain/entity/tag/tag.entity'
 
 export interface WindowLike {
 	readonly fetch: typeof window['fetch']
@@ -90,6 +91,17 @@ export const httpDataSourceImpl = reader.combine(
 				token,
 			)
 
+		const getTags = async (): Bluebird<Tags> => {
+			const response = await request(
+				'/tags',
+				{
+					method: 'GET',
+				},
+				tagsResponseCodec,
+			)
+			return response.tags
+		}
+
 		return {
 			getAllArticles,
 			getFeedArticles,
@@ -97,6 +109,9 @@ export const httpDataSourceImpl = reader.combine(
 			login,
 			register,
 			saveUser,
+			getTags,
 		}
 	},
 )
+
+const tagsResponseCodec = strict({ tags: tagsCodec })

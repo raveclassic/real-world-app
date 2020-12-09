@@ -1,12 +1,13 @@
 import { Profile, profileCodec } from '../profile/profile.entity'
 import { boolean, number, readonlyArray, strict, string, Type } from 'io-ts'
+import { Tags } from '../tag/tag.entity'
 
 export interface Article {
 	readonly slug: string
 	readonly title: string
 	readonly description: string
 	readonly body: string
-	readonly tagList: readonly string[]
+	readonly tagList: Tags
 	readonly createdAt: string
 	readonly updatedAt: string
 	readonly favorited: boolean

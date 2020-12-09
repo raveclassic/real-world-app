@@ -13,3 +13,8 @@ export const autoCancel = <F extends (...args: readonly any[]) => Bluebird<void>
 		p = fn(...args).finally(() => (p = undefined))
 	}
 }
+
+export const track = (fn: () => Bluebird<void>) => {
+	const promise = fn()
+	cleanup(() => promise.cancel())
+}
