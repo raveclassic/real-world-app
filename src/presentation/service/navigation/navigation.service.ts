@@ -112,10 +112,10 @@ const convertPageToUrl = (page: Page): string => {
 			return page.id === undefined ? '/article' : `/article/${page.id}`
 		}
 		case 'profile': {
-			return `/${page.username}`
+			return `/@${page.username}`
 		}
 		case 'favourites': {
-			return `/${page.username}/favourites`
+			return `/@${page.username}/favourites`
 		}
 		case 'home': {
 			return '/'

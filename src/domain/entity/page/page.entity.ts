@@ -29,6 +29,7 @@ export interface ProfilePage {
 	readonly kind: 'profile'
 	readonly username: string
 }
+export const profilePage = (username: string): ProfilePage => ({ kind: 'profile', username })
 
 export interface FavouritesPage {
 	readonly kind: 'favourites'

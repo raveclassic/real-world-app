@@ -1,5 +1,5 @@
 import { reader } from '../../../util/reader'
-import { strict, Type, voidType } from 'io-ts'
+import { strict, Type, unknown } from 'io-ts'
 import Bluebird from 'bluebird'
 import { either } from 'fp-ts'
 import { Articles, articlesCodec } from '../../../domain/entity/article/article.entity'
@@ -80,16 +80,17 @@ export const httpDataSourceImpl = reader.combine(
 				userCodec,
 			)
 
-		const saveUser = async (user: User, token: string): Bluebird<void> =>
+		const saveUser = async (user: User, token: string): Bluebird<void> => {
 			await request(
 				'/user',
 				{
 					method: 'PUT',
 					body: JSON.stringify({ user }),
 				},
-				voidType,
+				unknown,
 				token,
 			)
+		}
 
 		const getTags = async (): Bluebird<Tags> => {
 			const response = await request(
@@ -102,6 +103,28 @@ export const httpDataSourceImpl = reader.combine(
 			return response.tags
 		}
 
+		const favouriteArticle = async (slug: string, token: string): Bluebird<void> => {
+			await request(
+				`/articles/${slug}/favourite`,
+				{
+					method: 'POST',
+				},
+				unknown,
+				token,
+			)
+		}
+
+		const unfavouriteArticle = async (slug: string, token: string): Bluebird<void> => {
+			await request(
+				`/articles/${slug}/favourite`,
+				{
+					method: 'DELETE',
+				},
+				unknown,
+				token,
+			)
+		}
+
 		return {
 			getAllArticles,
 			getFeedArticles,
@@ -110,6 +133,8 @@ export const httpDataSourceImpl = reader.combine(
 			register,
 			saveUser,
 			getTags,
+			favouriteArticle,
+			unfavouriteArticle,
 		}
 	},
 )

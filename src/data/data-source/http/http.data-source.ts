@@ -12,6 +12,8 @@ export interface HTTPDataSource {
 	readonly register: (email: string, password: string) => Bluebird<User>
 	readonly saveUser: (user: User, token: string) => Bluebird<void>
 	readonly getTags: () => Bluebird<Tags>
+	readonly favouriteArticle: (slug: string, token: string) => Bluebird<void>
+	readonly unfavouriteArticle: (slug: string, token: string) => Bluebird<void>
 }
 
 export const httpDataSource = reader.key<HTTPDataSource>()('httpDataSource')
