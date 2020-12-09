@@ -1,10 +1,9 @@
-import { Getter } from '../../../util/observable'
 import { reader } from '../../../util/reader'
 import { Auth } from '../../../domain/entity/auth/auth.entity'
-import { authModel } from '../../../domain/model/auth/auth.model'
+import { appStore } from '../../store/app/app.store'
 
 export interface HeaderViewModel {
-	readonly auth: Getter<Auth>
+	readonly auth: () => Auth
 }
 
-export const newHeaderViewModel = reader.combine(authModel, (authModel) => (): HeaderViewModel => authModel)
+export const newHeaderViewModel = reader.combine(appStore, (appStore) => (): HeaderViewModel => appStore)
