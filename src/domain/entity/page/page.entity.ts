@@ -1,6 +1,7 @@
 export interface LoginPage {
 	readonly kind: 'login'
 }
+export const loginPage: LoginPage = { kind: 'login' }
 
 export interface RegisterPage {
 	readonly kind: 'register'

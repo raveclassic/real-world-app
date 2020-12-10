@@ -4,9 +4,11 @@ import { articlesService } from '../../../../domain/service/articles/articles.se
 import { autoCancel } from '../../../../util/bluebird'
 import Bluebird from 'bluebird'
 import { data } from '../../../../util/observable'
-import { boolean, number, string } from 'io-ts'
 import { Tags } from '../../../../domain/entity/tag/tag.entity'
 import { Profile } from '../../../../domain/entity/profile/profile.entity'
+import { authService } from '../../../../domain/service/auth/auth.service'
+import { navigationService } from '../../../service/navigation/navigation.service'
+import { loginPage } from '../../../../domain/entity/page/page.entity'
 
 export interface ArticlePreviewViewModel {
 	readonly slug: string
@@ -28,7 +30,11 @@ export interface NewArticlePreviewViewModelArgs {
 
 export const newArticlePreviewViewModel = reader.combine(
 	articlesService,
-	(articlesService) => (args: NewArticlePreviewViewModelArgs): ArticlePreviewViewModel => {
+	authService,
+	navigationService,
+	(articlesService, authService, navigationService) => (
+		args: NewArticlePreviewViewModelArgs,
+	): ArticlePreviewViewModel => {
 		const article = args.article
 
 		const isFavourited = data(args.article.favorited)
@@ -36,6 +42,10 @@ export const newArticlePreviewViewModel = reader.combine(
 
 		const toggleFavourite = autoCancel(
 			async (): Bluebird<void> => {
+				const auth = await authService.getAuth()
+				if (auth.kind === 'unauthorized') {
+					return navigationService.navigateToPage(loginPage)
+				}
 				if (isFavourited()) {
 					// optimistic
 					isFavourited(false)
