@@ -3,9 +3,10 @@ import { strict, Type, unknown } from 'io-ts'
 import Bluebird from 'bluebird'
 import { either } from 'fp-ts'
 import { Articles, articlesCodec } from '../../../domain/entity/article/article.entity'
-import { User, userCodec } from '../../../domain/entity/user/user.entity'
+import { User } from '../../../domain/entity/user/user.entity'
 import { HTTPDataSource } from './http.data-source'
 import { Tags, tagsCodec } from '../../../domain/entity/tag/tag.entity'
+import { AuthInfo, authInfoCodec } from '../../../domain/entity/auth-info/auth-info.entity'
 
 export interface WindowLike {
 	readonly fetch: typeof window['fetch']
@@ -24,23 +25,31 @@ export const httpDataSourceImpl = reader.combine(
 			const result = await new Bluebird((resolve, reject, onCancel) => {
 				const controller = new AbortController()
 				onCancel?.(() => controller.abort())
-				const headers = new Headers({
+
+				const headers: Record<string, string> = {
 					'Content-Type': 'application/json',
 					Accept: 'application/json',
-				})
-				headers.append('Authorization', `Token ${token}`)
+				}
+				if (token !== undefined) {
+					headers['Authorization'] = `Token ${token}`
+				}
 
 				window
 					.fetch(`${apiURL}${url}`, {
 						method: 'GET',
+						credentials: 'include',
 						...init,
-						headers: new Headers({
-							...headers,
-							...init.headers,
-						}),
+						headers,
 						signal: controller.signal,
 					})
-					.then((response) => response.json())
+					.then(async (response) => {
+						const json = await response.json()
+						if (response.ok) {
+							return json
+						} else {
+							throw json
+						}
+					})
 					.then(resolve)
 					.catch(reject)
 			})
@@ -57,28 +66,34 @@ export const httpDataSourceImpl = reader.combine(
 		const getFeedArticles = async (token: string): Bluebird<Articles> =>
 			await request('/articles/feed', { method: 'GET' }, articlesCodec, token)
 
-		const getCurrentUser = async (token: string): Bluebird<User> =>
-			await request('/user', { method: 'GET' }, userCodec, token)
+		const getCurrentUser = async (token: string): Bluebird<AuthInfo> => {
+			const response = await request('/user', { method: 'GET' }, authResponseCodec, token)
+			return response.user
+		}
 
-		const login = async (email: string, password: string): Bluebird<User> =>
-			await request(
-				'/user/login',
+		const login = async (email: string, password: string): Bluebird<AuthInfo> => {
+			const response = await request(
+				'/users/login',
 				{
 					method: 'POST',
 					body: JSON.stringify({ user: { email, password } }),
 				},
-				userCodec,
+				authResponseCodec,
 			)
+			return response.user
+		}
 
-		const register = async (email: string, password: string): Bluebird<User> =>
-			await request(
+		const register = async (email: string, password: string): Bluebird<AuthInfo> => {
+			const response = await request(
 				'/users',
 				{
 					method: 'POST',
 					body: JSON.stringify({ user: { email, password } }),
 				},
-				userCodec,
+				authResponseCodec,
 			)
+			return response.user
+		}
 
 		const saveUser = async (user: User, token: string): Bluebird<void> => {
 			await request(
@@ -140,3 +155,4 @@ export const httpDataSourceImpl = reader.combine(
 )
 
 const tagsResponseCodec = strict({ tags: tagsCodec })
+const authResponseCodec = strict({ user: authInfoCodec })

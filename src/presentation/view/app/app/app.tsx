@@ -3,18 +3,20 @@ import { reader } from '../../../../util/reader'
 import { HeaderContainer } from '../../header/header.container'
 import { AppViewModel } from './app.view-model'
 import { HomeContainer } from '../../home/home/home.container'
+import { LoginContainer } from '../../login/login/login.container'
 
 export const App = reader.combine(
 	HeaderContainer,
 	HomeContainer,
-	(HeaderContainer, HomeContainer) => (vm: AppViewModel) => (
+	LoginContainer,
+	(HeaderContainer, HomeContainer, LoginContainer) => (vm: AppViewModel) => (
 		<div>
 			<HeaderContainer />
 			{() => {
 				const page = vm.page()
 				switch (page.kind) {
 					case 'login': {
-						break
+						return <LoginContainer />
 					}
 					case 'register': {
 						break

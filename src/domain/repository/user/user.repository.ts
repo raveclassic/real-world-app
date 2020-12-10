@@ -1,9 +1,9 @@
 import Bluebird from 'bluebird'
-import { User } from '../../entity/user/user.entity'
 import { reader } from '../../../util/reader'
+import { AuthInfo } from '../../entity/auth-info/auth-info.entity'
 
 export interface UserRepository {
-	readonly getCurrentUser: (token: string) => Bluebird<User>
+	readonly getCurrentUser: (token: string) => Bluebird<AuthInfo>
 	readonly logout: () => void
 }
 

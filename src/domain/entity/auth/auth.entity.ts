@@ -1,4 +1,4 @@
-import { User } from '../user/user.entity'
+import { AuthInfo } from '../auth-info/auth-info.entity'
 
 export interface Unauthorized {
 	readonly kind: 'unauthorized'
@@ -7,8 +7,8 @@ export const unauthorized: Unauthorized = { kind: 'unauthorized' }
 
 export interface Authorized {
 	readonly kind: 'authorized'
-	readonly user: User
+	readonly info: AuthInfo
 }
-export const authorized = (user: User): Authorized => ({ kind: 'authorized', user })
+export const authorized = (info: AuthInfo): Authorized => ({ kind: 'authorized', info })
 
 export type Auth = Unauthorized | Authorized

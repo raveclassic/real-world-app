@@ -58,9 +58,13 @@ export const Header = reader.combine(
 
 											<li className="nav-item">
 												<NavLinkContainer
-													page={() => ({ kind: 'profile', username: value.user.name })}>
-													<img src={value.user.image} alt="avatar" className="user-pic" />
-													{value.user.name}
+													page={() => ({ kind: 'profile', username: value.info.username })}>
+													<img
+														src={value.info.image ?? undefined}
+														alt="avatar"
+														className="user-pic"
+													/>
+													{value.info.username}
 												</NavLinkContainer>
 											</li>
 										</>

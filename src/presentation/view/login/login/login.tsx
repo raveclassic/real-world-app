@@ -1,9 +1,10 @@
-import { H } from '../../../util/h'
-import { reader } from '../../../util/reader'
-import { LinkContainer } from '../ui-kit/link/link.container'
+import { H } from '../../../../util/h'
+import { reader } from '../../../../util/reader'
+import { LinkContainer } from '../../ui-kit/link/link.container'
 import { JSXInternal } from 'sinuous/jsx'
 import { LoginViewModel } from './login.view-model'
 import GenericEventHandler = JSXInternal.GenericEventHandler
+import { ListErrors } from '../list-errors/list-errors'
 
 export const Login = reader.combine(LinkContainer, (LinkContainer) => (props: LoginViewModel) => {
 	const { email, onEmailChange, password, onPasswordChange, isInProgress, onSubmit } = props
@@ -26,7 +27,10 @@ export const Login = reader.combine(LinkContainer, (LinkContainer) => (props: Lo
 							<LinkContainer page={() => ({ kind: 'register' })}>Need an account?</LinkContainer>
 						</p>
 
-						{/*<ListErrors errors={this.props.errors} />*/}
+						{() => {
+							const errors = props.lastErrors()
+							return errors && <ListErrors errors={errors} />
+						}}
 
 						<form onSubmit={handleSubmit}>
 							<fieldset>
