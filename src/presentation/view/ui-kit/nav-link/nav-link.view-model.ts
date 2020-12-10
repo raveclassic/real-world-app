@@ -1,6 +1,6 @@
 import { Getter } from '../../../../util/observable'
 import { reader } from '../../../../util/reader'
-import { Page } from '../../../../domain/entity/page/page.entity'
+import { Page } from '../../../entity/page/page.entity'
 import { navigationService } from '../../../service/navigation/navigation.service'
 
 export interface NavLinkViewModel {

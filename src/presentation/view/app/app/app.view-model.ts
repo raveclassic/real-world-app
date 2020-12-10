@@ -1,6 +1,6 @@
 import { reader } from '../../../../util/reader'
 import { navigationService } from '../../../service/navigation/navigation.service'
-import { Page } from '../../../../domain/entity/page/page.entity'
+import { Page } from '../../../entity/page/page.entity'
 
 export interface AppViewModel {
 	readonly page: () => Page

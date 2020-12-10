@@ -8,7 +8,7 @@ import { Tags } from '../../../../domain/entity/tag/tag.entity'
 import { Profile } from '../../../../domain/entity/profile/profile.entity'
 import { authService } from '../../../../domain/service/auth/auth.service'
 import { navigationService } from '../../../service/navigation/navigation.service'
-import { loginPage } from '../../../../domain/entity/page/page.entity'
+import { loginPage } from '../../../entity/page/page.entity'
 
 export interface ArticlePreviewViewModel {
 	readonly slug: string

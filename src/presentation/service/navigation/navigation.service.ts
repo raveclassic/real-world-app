@@ -2,7 +2,7 @@ import { reader } from '../../../util/reader'
 import { cleanup, S } from 'sinuous/observable'
 import { data } from '../../../util/observable'
 import { History } from 'history'
-import { homePage, Page } from '../../../domain/entity/page/page.entity'
+import { homePage, Page } from '../../entity/page/page.entity'
 
 export interface NavigationService {
 	readonly page: () => Page

@@ -1,7 +1,7 @@
 import { H } from '../../../../util/h'
 import { reader } from '../../../../util/reader'
 import { LinkContainer } from '../../ui-kit/link/link.container'
-import { articlePage, profilePage } from '../../../../domain/entity/page/page.entity'
+import { articlePage, profilePage } from '../../../entity/page/page.entity'
 import { ArticlePreviewViewModel } from './article-preview.view-model'
 import { map } from 'sinuous/map'
 import classNames from 'classnames'
@@ -10,13 +10,12 @@ import MouseEventHandler = JSXInternal.MouseEventHandler
 import { S } from 'sinuous/observable'
 
 export const ArticlePreview = reader.combine(LinkContainer, (LinkContainer) => (vm: ArticlePreviewViewModel) => {
-	// const article = vm.article
-	const favoriteButtonClass = S(() => {
-		return classNames('btn btn-sm', {
+	const favoriteButtonClass = S(() =>
+		classNames('btn btn-sm', {
 			'btn-primary': vm.isFavourited(),
 			'btn-outline-primary': !vm.isFavourited(),
-		})
-	})
+		}),
+	)
 
 	const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
 		e.preventDefault()

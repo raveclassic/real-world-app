@@ -1,5 +1,5 @@
 import { reader } from '../../../../util/reader'
-import { Page } from '../../../../domain/entity/page/page.entity'
+import { Page } from '../../../entity/page/page.entity'
 import { S } from 'sinuous/observable'
 import { navigationService } from '../../../service/navigation/navigation.service'
 
