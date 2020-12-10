@@ -66,7 +66,7 @@ const checkEditorPage = (url: string): Page | undefined => {
 	if (url === '/editor') {
 		return { kind: 'editor' }
 	}
-	const match = /^\/editor\/(\w+)$/.exec(url)
+	const match = /^\/editor\/([^/]+)$/.exec(url)
 	const slug = match?.[1]
 	if (slug !== undefined) {
 		return { kind: 'editor', slug }
@@ -74,7 +74,7 @@ const checkEditorPage = (url: string): Page | undefined => {
 }
 
 const checkArticlePage = (url: string): Page | undefined => {
-	const match = /^\/article\/(\w+)$/.exec(url)
+	const match = /^\/article\/([^/]+)$/.exec(url)
 	const slug = match?.[1]
 	if (slug !== undefined) {
 		return { kind: 'article', slug }
@@ -82,7 +82,7 @@ const checkArticlePage = (url: string): Page | undefined => {
 }
 
 const checkFavouritesPage = (url: string): Page | undefined => {
-	const match = /^\/(\w+)\/favourites$/.exec(url)
+	const match = /^\/@([^/]+)\/favourites$/.exec(url)
 	const username = match?.[1]
 	if (username !== undefined) {
 		return { kind: 'favourites', username }
@@ -90,7 +90,7 @@ const checkFavouritesPage = (url: string): Page | undefined => {
 }
 
 const checkProfilePage = (url: string): Page | undefined => {
-	const match = /^\/(\w+)$/.exec(url)
+	const match = /^\/@([^/]+)$/.exec(url)
 	const username = match?.[1]
 	if (username !== undefined) {
 		return { kind: 'profile', username }
