@@ -1,57 +1,62 @@
 import { H } from '../../../../util/h'
 import { reader } from '../../../../util/reader'
 import { LinkContainer } from '../../ui-kit/link/link.container'
-import { profilePage } from '../../../../domain/entity/page/page.entity'
+import { articlePage, profilePage } from '../../../../domain/entity/page/page.entity'
 import { ArticlePreviewViewModel } from './article-preview.view-model'
+import { map } from 'sinuous/map'
+import classNames from 'classnames'
+import { JSXInternal } from 'sinuous/jsx'
+import MouseEventHandler = JSXInternal.MouseEventHandler
+import { S } from 'sinuous/observable'
 
 export const ArticlePreview = reader.combine(LinkContainer, (LinkContainer) => (vm: ArticlePreviewViewModel) => {
-	const article = vm.article
-	const favoriteButtonClass = article.favorited ? FAVORITED_CLASS : NOT_FAVORITED_CLASS
+	// const article = vm.article
+	const favoriteButtonClass = S(() => {
+		return classNames('btn btn-sm', {
+			'btn-primary': vm.isFavourited(),
+			'btn-outline-primary': !vm.isFavourited(),
+		})
+	})
 
-	const handleClick = (ev) => {
-		ev.preventDefault()
-		if (article.favorited) {
-			props.unfavorite(article.slug)
-		} else {
-			props.favorite(article.slug)
-		}
+	const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+		e.preventDefault()
+		vm.toggleFavourite()
 	}
 
 	return (
 		<div className="article-preview">
 			<div className="article-meta">
-				<LinkContainer page={() => profilePage(article.author.username)}>
-					<img src={article.author.image} alt={article.author.username} />
+				<LinkContainer page={() => profilePage(vm.author.username)}>
+					<img src={vm.author.image} alt={vm.author.username} />
 				</LinkContainer>
 
 				<div className="info">
-					<LinkContainer className={() => 'author'} page={() => profilePage(article.author.username)}>
-						{article.author.username}
+					<LinkContainer className={() => 'author'} page={() => profilePage(vm.author.username)}>
+						{vm.author.username}
 					</LinkContainer>
-					<span className="date">{new Date(article.createdAt).toDateString()}</span>
+					<span className="date">{new Date(vm.createdAt).toDateString()}</span>
 				</div>
 
 				<div className="pull-xs-right">
 					<button className={favoriteButtonClass} onClick={handleClick}>
-						<i className="ion-heart"></i> {article.favoritesCount}
+						<i className="ion-heart" /> {vm.favoritesCount}
 					</button>
 				</div>
 			</div>
 
-			<Link to={`/article/${article.slug}`} className="preview-link">
-				<h1>{article.title}</h1>
-				<p>{article.description}</p>
+			<LinkContainer page={() => articlePage(vm.slug)} className={() => 'preview-link'}>
+				<h1>{vm.title}</h1>
+				<p>{vm.description}</p>
 				<span>Read more...</span>
 				<ul className="tag-list">
-					{article.tagList.map((tag) => {
-						return (
-							<li className="tag-default tag-pill tag-outline" key={tag}>
-								{tag}
-							</li>
-						)
-					})}
+					{map(
+						() => vm.tagList.slice(),
+						(tag) => (
+							<li className="tag-default tag-pill tag-outline">{tag}</li>
+						),
+					)}
 				</ul>
-			</Link>
+			</LinkContainer>
 		</div>
 	)
 })

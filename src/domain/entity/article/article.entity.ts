@@ -28,6 +28,12 @@ export const articleCodec: Type<Article, unknown> = strict({
 	author: profileCodec,
 })
 
-export interface Articles extends ReadonlyArray<Article> {}
+export interface Articles {
+	readonly articles: readonly Article[]
+	readonly articlesCount: number
+}
 
-export const articlesCodec: Type<Articles, unknown> = readonlyArray(articleCodec)
+export const articlesCodec: Type<Articles, unknown> = strict({
+	articles: readonlyArray(articleCodec),
+	articlesCount: number,
+})

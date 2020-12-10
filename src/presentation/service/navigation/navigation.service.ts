@@ -75,9 +75,9 @@ const checkEditorPage = (url: string): Page | undefined => {
 
 const checkArticlePage = (url: string): Page | undefined => {
 	const match = /^\/article\/(\w+)$/.exec(url)
-	const id = match?.[1]
-	if (id !== undefined) {
-		return { kind: 'article', id }
+	const slug = match?.[1]
+	if (slug !== undefined) {
+		return { kind: 'article', slug }
 	}
 }
 
@@ -109,7 +109,7 @@ const convertPageToUrl = (page: Page): string => {
 			return page.slug === undefined ? '/editor' : `/editor/${page.slug}`
 		}
 		case 'article': {
-			return page.id === undefined ? '/article' : `/article/${page.id}`
+			return page.slug === undefined ? '/article' : `/article/${page.slug}`
 		}
 		case 'profile': {
 			return `/@${page.username}`

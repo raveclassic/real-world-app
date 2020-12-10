@@ -22,8 +22,9 @@ export interface EditorPage {
 
 export interface ArticlePage {
 	readonly kind: 'article'
-	readonly id: string
+	readonly slug: string
 }
+export const articlePage = (slug: string): ArticlePage => ({ kind: 'article', slug })
 
 export interface ProfilePage {
 	readonly kind: 'profile'

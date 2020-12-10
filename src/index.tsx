@@ -10,6 +10,8 @@ import { httpDataSourceImpl } from './data/data-source/http/http.data-source.imp
 import { authServiceImpl } from './domain/service/auth/auth.service.impl'
 import { tagsServiceImpl } from './domain/service/tags/tags.service.impl'
 import { tagsRepositoryImpl } from './data/repository/tags/tags.repository.impl'
+import { articlesServiceImpl } from './domain/service/articles/articles.service.impl'
+import { articlesRepositoryImpl } from './data/repository/articles/articles.repository.impl'
 
 const root = document.getElementById('root')
 const DIContainer = () => {
@@ -22,7 +24,9 @@ const DIContainer = () => {
 	const authService = authServiceImpl({ authRepository, userRepository })
 	const tagsRepository = tagsRepositoryImpl({ httpDataSource })
 	const tagsService = tagsServiceImpl({ tagsRepository })
-	const Resolved = BootstrapContainer({ navigationService, authService, tagsService })
+	const articlesRepository = articlesRepositoryImpl({ httpDataSource })
+	const articlesService = articlesServiceImpl({ authRepository, articlesRepository })
+	const Resolved = BootstrapContainer({ navigationService, authService, tagsService, articlesService })
 	return <Resolved />
 }
 render(DIContainer, root ?? undefined)

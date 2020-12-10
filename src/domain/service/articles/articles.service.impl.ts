@@ -3,6 +3,7 @@ import { articlesRepository } from '../../repository/articles/articles.repositor
 import { ArticlesService } from './articles.service'
 import { authRepository } from '../../repository/auth/auth.repository'
 import Bluebird from 'bluebird'
+import { Articles } from '../../entity/article/article.entity'
 
 export const articlesServiceImpl = reader.combine(
 	articlesRepository,
@@ -22,9 +23,14 @@ export const articlesServiceImpl = reader.combine(
 			}
 		}
 
+		const getGlobalFeed = async (): Bluebird<Articles> => {
+			return await articlesRepository.getAllArticles()
+		}
+
 		return {
 			favouriteArticle,
 			unfavouriteArticle,
+			getGlobalFeed,
 		}
 	},
 )
